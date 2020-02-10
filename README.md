@@ -1,5 +1,5 @@
 # hr-graphs-ph
-geometric graphs based on a [Hertzsprung–Russell diagram](https://en.wikipedia.org/wiki/Hertzsprung%E2%80%93Russell_diagram) and their correspondent persistent homology graph families
+geometric graphs based on a [Hertzsprung–Russell diagram](https://en.wikipedia.org/wiki/Hertzsprung%E2%80%93Russell_diagram) and their corresponding persistent homology graph families
 ___
 
 a H-R diagram (which is obtainable from [this](https://github.com/izzorts/hr-graphs-ph/blob/master/original%20code%20and%20data/simple_plot_9_python.py)):
