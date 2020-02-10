@@ -2,9 +2,13 @@
 geometric graphs based on a [Hertzsprung–Russell diagram](https://en.wikipedia.org/wiki/Hertzsprung%E2%80%93Russell_diagram) and their correspondent persistent homology graph families
 ___
 
-a slightly deformed (minmax scaled and rotated) otherwise common H-R diagram:
+a H-R diagram:
 
-![hr diagram](https://github.com/izzorts/hr-graphs-ph/blob/master/outputs/hrdiag.png)
+![hr diagram](https://github.com/izzorts/hr-graphs-ph/blob/master/outputs/HRdiagram.png)
+
+a slightly deformed (minmax scaled and rotated) otherwise common H-R diagram, which is one of the outputs of `HR_graph.ipynb`:
+
+![transformed hr diagram](https://github.com/izzorts/hr-graphs-ph/blob/master/outputs/hrdiag.png)
 
 and its corresponding "H-R graph", which is a geometric graph based on the stars' magnitudes and luminosities, for a suitable distance threshold:
 
