@@ -10,8 +10,6 @@ and its corresponding "H-R graph", which is a geometric graph based on the stars
 
 ![hr graph](https://github.com/izzorts/hr-graphs-ph/blob/master/outputs/hrgraph.png)
 
-___
-
 by varying this threshold we obtain graphs for different spatial resolutions (see [persistent homology](https://en.wikipedia.org/wiki/Persistent_homology)), yielding the following gif:
 
 ![hr ph gif](https://github.com/izzorts/hr-graphs-ph/blob/master/outputs/output.gif)
