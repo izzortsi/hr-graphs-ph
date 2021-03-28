@@ -9,101 +9,110 @@ from gi.repository import Gtk, Gdk, GdkPixbuf, GObject, GLib
 
 
 ##
-#importing data
+# importing data
 
 offscreen = True
+
+max_count = 50
+if offscreen and not os.path.exists("./frames"):
+    os.mkdir("./frames")
 ##
-mass,lum,mag= loadtxt('new_data.txt', usecols=(2,3,4), unpack=True, skiprows=2)
-                                     #building the graph
+mass, lum, mag = loadtxt("new_data.txt", usecols=(2, 3, 4), unpack=True, skiprows=2)
+# building the graph
 
 g = gt.Graph(directed=False)
 
-Lum  = g.new_vertex_property('float')
-Mag = g.new_vertex_property('float')
-Mass = g.new_vertex_property('float')
-Distance = g.new_edge_property('float')
+Lum = g.new_vertex_property("float")
+Mag = g.new_vertex_property("float")
+Mass = g.new_vertex_property("float")
+Position = g.new_vp("vector<double>")
+Distance = g.new_edge_property("float")
 
 g.vp.lum = Lum
 g.vp.mag = Mag
 g.vp.mass = Mass
+g.vp.pos = Position
 g.ep.dist = Distance
 
-N=400
+N = 2000
 v = g.add_vertex(N)
 
-mag =mag[0:N]
+mag = mag[0:N]
 lum = lum[0:N]
 mass = mass[0:N]
 
-init_foot = 0.0001
-ibin =      0.0001
+init_foot = 0.00003
+ibin = 0.00001
 fbin = 0.21
 
-step = 0.3      # move step
-K = 1.0
+step = 0.01  # move step
+K = 0.5
 
 ##
 
 
-
 ##
-#minmax scaling
-mag-=min(mag);mag/=max(mag)
-lum -= min(lum); lum /= max(lum)
-mass-=min(mass);mass/=max(mass)
+# minmax scaling
+mag -= min(mag)
+mag /= max(mag)
+lum -= min(lum)
+lum /= max(lum)
+mass -= min(mass)
+mass /= max(mass)
 
 for i, v in enumerate(g.get_vertices()):
-    g.vp.lum[v]=lum[i]
-    g.vp.mag[v]=mag[i]
+    g.vp.lum[v] = lum[i]
+    g.vp.mag[v] = mag[i]
     g.vp.mass[v] = mass[i]
-
-#gtdraw = gt.graph_draw(g, pos=g.vp.pos, vertex_fill_color=g.vp.lum,vertex_size=gt.prop_to_size(g.vp.mass, mi=3, ma=9.5, log=False, power=2))
 ##
 points = np.array(list(zip(g.vp.lum.a, g.vp.mag.a)))
-
-
 ##
 gg, gpos = gt.geometric_graph(points, fbin)
 ##
-ug = gt.graph_union(gg, g, intersection = g.vertex_index, internal_props=True)
+g.copy_property(gpos, g.vp.pos)
+##
+ug = gt.graph_union(gg, g, intersection=g.vertex_index, internal_props=True)
 ##
 def set_distances(g):
     dists = []
     for e in ug.edges():
         s, t = e
-        pos_s = np.array([g.vp.lum[s], g.vp.mag[s]])
-        pos_t = np.array([g.vp.lum[t], g.vp.mag[t]])
+        pos_s = np.array(g.vp.pos[s])
+        pos_t = np.array(g.vp.pos[t])
         distance = norm(pos_s - pos_t)
-        #print(distance)
+        # print(distance)
         dists.append(distance)
         g.ep.dist[e] = distance
     return dists
-        
+
+
 ##
 distances = set_distances(ug)
 
-edge_filter = ug.new_ep('bool')
+edge_filter = ug.new_ep("bool")
 edge_filter.a = ug.ep.dist.a < ibin
 ug.set_edge_filter(edge_filter)
 ##
-pos = gt.sfdp_layout(ug, eweight = ug.ep.dist, K=K)
-
-##
-
-
-##
-#offscreen = sys.argv[1] == "offscreen" if len(sys.argv) > 1 else False
-max_count = 500
-if offscreen and not os.path.exists("./frames"):
-    os.mkdir("./frames")
+pos = gt.sfdp_layout(ug, pos=ug.vp.pos, eweight=ug.ep.dist, K=K)
 
 # This creates a GTK+ window with the initial graph layout
 if not offscreen:
-    win = gt.GraphWindow(ug, pos, geometry=(800, 800), vertex_fill_color=ug.vp.lum,vertex_size=gt.prop_to_size(ug.vp.mass, mi=2, ma=10, log=False, power=2))
+    win = gt.GraphWindow(
+        ug,
+        pos,
+        geometry=(800, 800),
+        vertex_fill_color=ug.vp.lum,
+        vertex_size=gt.prop_to_size(ug.vp.mass, mi=2, ma=10, log=False, power=2),
+    )
 else:
     win = Gtk.OffscreenWindow()
     win.set_default_size(800, 800)
-    win.graph = gt.GraphWidget(ug, pos, vertex_fill_color=ug.vp.lum,vertex_size=gt.prop_to_size(ug.vp.mass, mi=2, ma=10, log=False, power=2))
+    win.graph = gt.GraphWidget(
+        ug,
+        pos,
+        vertex_fill_color=ug.vp.lum,
+        vertex_size=gt.prop_to_size(ug.vp.mass, mi=2, ma=10, log=False, power=2),
+    )
     win.add(win.graph)
 
 count = 0
@@ -116,8 +125,8 @@ def update_state():
     edge_filter.a = ug.ep.dist.a < ibin
     ug.set_edge_filter(edge_filter)
 
-    gt.sfdp_layout(ug, pos=pos, eweight = ug.ep.dist, K=K, init_step=step, max_iter=1)
-    
+    gt.sfdp_layout(ug, pos=pos, eweight=ug.ep.dist, K=K, init_step=step, max_iter=1)
+
     if count > 0 and count % 1000 == 0:
         win.graph.fit_to_window(ink=True)
 
@@ -132,10 +141,9 @@ def update_state():
 
     if offscreen:
         pixbuf = win.get_pixbuf()
-        pixbuf.savev(r'./frames/dancing%06d.png' % count, 'png', [], [])
+        pixbuf.savev(r"./frames/dancing%06d.png" % count, "png", [], [])
         if count > max_count:
             sys.exit(0)
-
 
     # We need to return True so that the main loop will call this function more
     # than once.
