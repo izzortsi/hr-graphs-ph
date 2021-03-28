@@ -4,14 +4,16 @@ import graph_tool.all as gt
 from numpy.linalg import norm
 from pylab import *
 from gi.repository import Gtk, Gdk, GdkPixbuf, GObject, GLib
-
+from datetime import datetime
 
 ##
 # importing data
-
+##
+stamp = datetime.strftime(datetime.now(), "%d_%h-%H-%M")
+##
 offscreen = True
 max_count = 30
-outpath = "./outputs_2"
+outpath = f"./outputs_{stamp}"
 if offscreen and not os.path.exists(outpath):
     os.mkdir(outpath)
 ##

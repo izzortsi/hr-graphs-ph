@@ -2,16 +2,20 @@
 import os
 import graph_tool.all as gt
 from pylab import *
+from datetime import datetime
 
 ##
 # importing data
-
-mass, lum, mag = loadtxt("new_data.txt", usecols=(2, 3, 4), unpack=True, skiprows=2)
-# building the graph
-outpath = "./outputs_1"
-if not os.path.exists(outpath):
+##
+stamp = datetime.strftime(datetime.now(), "%d_%h-%H-%M")
+##
+offscreen = True
+max_count = 30
+outpath = f"./outputs_{stamp}"
+if offscreen and not os.path.exists(outpath):
     os.mkdir(outpath)
 
+mass, lum, mag = loadtxt("new_data.txt", usecols=(2, 3, 4), unpack=True, skiprows=2)
 g = gt.Graph(directed=False)
 
 Mass = g.new_vertex_property("float")
