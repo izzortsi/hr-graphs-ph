@@ -66,13 +66,10 @@ posv = g.vp.pos.get_2d_array([0, 1]).T
 ##
 gg, gpos = gt.geometric_graph(posv, fbin)
 ##
-gg.num_edges()
-##
 ug = gt.graph_union(gg, g, intersection=g.vertex_index, internal_props=True)
 ##
 
-# g.copy_property(gpos, g.vp.pos)
-##
+
 def set_distances(g):
     dists = []
     for e in ug.edges():
@@ -87,45 +84,37 @@ def set_distances(g):
 
 
 ##
-ug.num_edges()
-
-##
 distances = set_distances(ug)
 
-edge_filter = ug.new_ep("bool")
-ug.ep.efilter = edge_filter
-ug.ep.efilter.a = ug.ep.dist.a < ibin
-ug.set_edge_filter(edge_filter)
-##
-ug.num_edges()
-##
-pos = gt.sfdp_layout(ug, pos=ug.vp.pos, K=K)
-ug.vp.pos = pos
-##
 
+def graph_sequence(g, ibin, init_foot, fbin, init_step, max_iter, K):
 
-def make_gif(g, ibin, init_foot, fbin, init_step, max_iter, K):
-    cbin = ibin
-    graphs = [g.copy()]
+    dist_array = np.array(g.ep.dist.a)
+    filter_array = dist_array <= ibin
+    gv = gt.GraphView(g, efilt=filter_array)
+    ng = gt.Graph(gv, prune=True)
+    pos = gt.sfdp_layout(ng, pos=ng.vp.pos, K=K)
+    ng.vp.pos = pos
+    graphs = [ng]
+
+    cbin = ibin + init_foot
     # pos = gt.sfdp_layout(g, pos=pos, K=1.5)
     while cbin <= fbin:
-        g = graphs[-1]
-        g.ep.efilter.a = g.ep.dist.a < cbin
-        g.set_edge_filter(g.ep.efilter)
-        # print(g.num_edges())
-        g.vp.pos = gt.sfdp_layout(
-            g, pos=g.vp.pos, max_iter=max_iter, init_step=init_step, K=K
+        filter_array = dist_array <= cbin
+        gv = gt.GraphView(g, efilt=filter_array)
+        ng = gt.Graph(gv, prune=True)
+        ng.copy_property(graphs[-1].vp.pos, tgt=ng.vp.pos)
+        # print(ng.num_edges())
+        ng.vp.pos = gt.sfdp_layout(
+            ng, pos=ng.vp.pos, max_iter=max_iter, init_step=init_step, K=K
         )
-        graphs.append(g.copy())
+        graphs.append(ng)
 
         cbin += init_foot
         # step += init_foot * 3
     return graphs
 
 
-##
-
-##
 def draw_frames(glist):
     stamp = datetime.strftime(datetime.now(), "%d_%h-%H-%M")
     outpath = f"./outputs_{stamp}"
@@ -136,19 +125,17 @@ def draw_frames(glist):
             gu,
             pos=gu.vp.pos,
             vertex_fill_color=gu.vp.lum,
-            edge_pen_width=0.5,
+            edge_pen_width=0.2,
             vertex_size=gt.prop_to_size(gu.vp.mass, mi=2, ma=10, log=False, power=2),
             output=os.path.join(outpath, "frame%06d.png" % i),
         )
 
 
 ##
-glist = make_gif(ug, ibin, init_foot, fbin, init_step, max_iter, K)
+%timeit -n 1 -r 1 graph_sequence(ug, ibin, init_foot, fbin, init_step, max_iter, K)
+##
+glist = graph_sequence(ug, ibin, init_foot, fbin, init_step, max_iter, K)
 ##
 draw_frames(glist)
-
-##
-glist[-1].num_edges()
-##
 
 ##
