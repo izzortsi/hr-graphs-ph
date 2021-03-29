@@ -39,8 +39,8 @@ mass = mass[0:N]
 # ibin = 0.000001
 # fbin = 0.00002
 init_foot = 0.003
-ibin =      0.003
-fbin =      0.21
+ibin = 0.003
+fbin = 0.21
 init_step = 0.5  # move step
 K = 1.5
 max_iter = 8
@@ -65,6 +65,8 @@ for i, v in enumerate(g.vertices()):
 posv = g.vp.pos.get_2d_array([0, 1]).T
 ##
 gg, gpos = gt.geometric_graph(posv, fbin)
+##
+gg.num_edges()
 ##
 ug = gt.graph_union(gg, g, intersection=g.vertex_index, internal_props=True)
 ##
@@ -107,10 +109,13 @@ def make_gif(g, ibin, init_foot, fbin, init_step, max_iter, K):
     graphs = [g.copy()]
     # pos = gt.sfdp_layout(g, pos=pos, K=1.5)
     while cbin <= fbin:
+        g = graphs[-1]
         g.ep.efilter.a = g.ep.dist.a < cbin
         g.set_edge_filter(g.ep.efilter)
         # print(g.num_edges())
-        g.vp.pos = gt.sfdp_layout(g, pos=g.vp.pos, max_iter=max_iter, init_step=init_step, K=K)
+        g.vp.pos = gt.sfdp_layout(
+            g, pos=g.vp.pos, max_iter=max_iter, init_step=init_step, K=K
+        )
         graphs.append(g.copy())
 
         cbin += init_foot
@@ -138,8 +143,12 @@ def draw_frames(glist):
 
 
 ##
-glist = make_gif(ug, ibin, init_foot, fbin, init_step, max_iter, K);
+glist = make_gif(ug, ibin, init_foot, fbin, init_step, max_iter, K)
 ##
 draw_frames(glist)
+
+##
+glist[-1].num_edges()
+##
 
 ##
