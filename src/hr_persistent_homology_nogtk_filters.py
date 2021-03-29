@@ -28,7 +28,7 @@ g.vp.mass = Mass
 g.vp.pos = Position
 g.ep.dist = Distance
 
-N = 500
+N = 800
 v = g.add_vertex(N)
 
 mag = mag[0:N]
@@ -38,11 +38,12 @@ mass = mass[0:N]
 # init_foot = 0.000001
 # ibin = 0.000001
 # fbin = 0.00002
-init_foot = 0.000003
-ibin = 0.000001
-fbin = 0.2
-step = 0.02  # move step
-K = 0.5
+init_foot = 0.003
+ibin =      0.003
+fbin =      0.21
+init_step = 0.5  # move step
+K = 1.5
+max_iter = 8
 
 ##
 # minmax scaling
@@ -101,8 +102,7 @@ ug.vp.pos = pos
 ##
 
 
-def make_gif(g):
-    global ibin, fbin, init_foot, step
+def make_gif(g, ibin, init_foot, fbin, init_step, max_iter, K):
     cbin = ibin
     graphs = [g.copy()]
     # pos = gt.sfdp_layout(g, pos=pos, K=1.5)
@@ -110,7 +110,7 @@ def make_gif(g):
         g.ep.efilter.a = g.ep.dist.a < cbin
         g.set_edge_filter(g.ep.efilter)
         # print(g.num_edges())
-        g.vp.pos = gt.sfdp_layout(g, pos=g.vp.pos, max_iter=1, init_step=step, K=K)
+        g.vp.pos = gt.sfdp_layout(g, pos=g.vp.pos, max_iter=max_iter, init_step=init_step, K=K)
         graphs.append(g.copy())
 
         cbin += init_foot
@@ -119,7 +119,7 @@ def make_gif(g):
 
 
 ##
-glist = make_gif(ug)
+
 ##
 def draw_frames(glist):
     stamp = datetime.strftime(datetime.now(), "%d_%h-%H-%M")
@@ -138,7 +138,8 @@ def draw_frames(glist):
 
 
 ##
-
+glist = make_gif(ug, ibin, init_foot, fbin, init_step, max_iter, K);
+##
 draw_frames(glist)
 
 ##
