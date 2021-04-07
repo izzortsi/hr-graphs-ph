@@ -23,5 +23,5 @@ and
 
 finally, by varying this threshold we obtain a sequence of graphs for different spatial resolutions (see [persistent homology](https://en.wikipedia.org/wiki/Persistent_homology)), yielding the following animation:
 
-![hr ph gif](https://github.com/izzorts/hr-graphs-ph/blob/master/outputs/output.gif)
+![hr ph gif](https://github.com/izzortsi/hr-graphs-ph/blob/master/src/outputs/hrph.mp4)
 
