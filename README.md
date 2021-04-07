@@ -10,7 +10,7 @@ by constructing a geometric graph using the original HR diagram, while still hel
 
 ![hr_diagram2](https://github.com/izzortsi/hr-graphs-ph/blob/master/src/outputs/HR_diag_edges_0.09.png)
 
-if we now let loose of the points coordinates and let adjacency between vertices guide the layout of the graph we obtain one of what we call its corresponding "HR graph", for a suitable distance threshold:
+if we now let loose of the points' coordinates and let adjacency between vertices guide the layout (using [this](http://yifanhu.net/PUB/graph_draw_small.pdf)) of the graph we obtain one of what we call its corresponding "HR graph", for a suitable distance threshold:
 
 ![hr graph1](https://github.com/izzortsi/hr-graphs-ph/blob/master/src/outputs/HR_sfdp0.001.png)
 
