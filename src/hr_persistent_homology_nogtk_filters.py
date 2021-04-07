@@ -35,15 +35,21 @@ mag = mag[0:N]
 lum = lum[0:N]
 mass = mass[0:N]
 
-# init_foot = 0.000001
-# ibin = 0.000001
-# fbin = 0.00002
-init_foot = 0.003
-ibin = 0.003
-fbin = 0.21
-init_step = 0.5  # move step
-K = 1.5
-max_iter = 8
+init_foot = 0.0001
+ibin =      0.0001
+fbin =      0.15
+
+max_iter=1
+init_step=0.5
+K=1.5
+
+
+#init_foot = 0.003
+#ibin = 0.003
+#fbin = 0.21
+#init_step = 0.5  # move step
+#K = 1.5
+#max_iter = 8
 
 ##
 # minmax scaling
@@ -86,7 +92,7 @@ def set_distances(g):
 ##
 distances = set_distances(ug)
 
-
+##
 def graph_sequence(g, ibin, init_foot, fbin, init_step, max_iter, K):
 
     dist_array = np.array(g.ep.dist.a)
@@ -127,7 +133,7 @@ def draw_frames(glist):
             vertex_fill_color=gu.vp.lum,
             edge_pen_width=0.2,
             vertex_size=gt.prop_to_size(gu.vp.mass, mi=2, ma=10, log=False, power=2),
-            output=os.path.join(outpath, "frame%06d.png" % i),
+            output=os.path.join(outpath, "frame%06d.png" % i), adjust_aspect=False
         )
 
 
@@ -135,6 +141,7 @@ def draw_frames(glist):
 %timeit -n 1 -r 1 graph_sequence(ug, ibin, init_foot, fbin, init_step, max_iter, K)
 ##
 glist = graph_sequence(ug, ibin, init_foot, fbin, init_step, max_iter, K)
+
 ##
 draw_frames(glist)
 
