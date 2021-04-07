@@ -16,9 +16,13 @@ if we now let loose of the points coordinates and let adjacency between vertices
 
 for different such thresholds:
 ![hr graph2](https://github.com/izzortsi/hr-graphs-ph/blob/master/src/outputs/HR_sfdp0.03.png)
+
 and
+
 ![hr graph3](https://github.com/izzortsi/hr-graphs-ph/blob/master/src/outputs/HR_sfdp0.05.png)
+
 and
+
 ![hr graph4](https://github.com/izzortsi/hr-graphs-ph/blob/master/src/outputs/HR_sfdp0.09.png)
 
 finally, by varying this threshold we obtain a sequence of graphs for different spatial resolutions (see [persistent homology](https://en.wikipedia.org/wiki/Persistent_homology)), yielding the following animation:
