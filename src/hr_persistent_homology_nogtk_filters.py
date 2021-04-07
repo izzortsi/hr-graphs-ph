@@ -88,7 +88,6 @@ def set_distances(g):
         g.ep.dist[e] = distance
     return dists
 
-
 ##
 distances = set_distances(ug)
 
