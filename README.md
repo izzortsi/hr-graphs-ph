@@ -2,19 +2,26 @@
 geometric graphs based on a [Hertzsprung–Russell diagram](https://en.wikipedia.org/wiki/Hertzsprung%E2%80%93Russell_diagram) and their corresponding persistent homology graph families
 ___
 
-an H-R diagram (which is obtainable from [this](https://github.com/izzorts/hr-graphs-ph/blob/master/original%20code%20and%20data/simple_plot_9_python.py)):
+an HR diagram (which is obtainable from [this](https://github.com/izzorts/hr-graphs-ph/blob/master/original%20code%20and%20data/simple_plot_9_python.py)):
 
-![hr diagram](https://github.com/izzorts/hr-graphs-ph/blob/master/outputs/HRdiagram.png)
+![hr diagram](https://github.com/izzortsi/hr-graphs-ph/blob/master/src/outputs/HR_diag.png)
 
-a slightly deformed (minmax scaled and rotated), otherwise common H-R diagram, which is one of the outputs of `HR_graph.ipynb`:
+by constructing a geometric graph using the original HR diagram, while still helding the points fixed, we obtain the following: 
 
-![transformed hr diagram](https://github.com/izzorts/hr-graphs-ph/blob/master/outputs/hrdiag.png)
+![hr_diagram2](https://github.com/izzortsi/hr-graphs-ph/blob/master/src/outputs/HR_diag_edges_0.09.png)
 
-and its corresponding "H-R graph", which is a geometric graph based on the stars' magnitudes and luminosities, for a suitable distance threshold:
+if we now let loose of the points coordinates and let adjacency between vertices guide the layout of the graph we obtain one of what we call its corresponding "HR graph", for a suitable distance threshold:
 
-![hr graph](https://github.com/izzorts/hr-graphs-ph/blob/master/outputs/hrgraph.png)
+![hr graph1](https://github.com/izzortsi/hr-graphs-ph/blob/master/src/outputs/HR_sfdp0.001.png)
 
-by varying this threshold we obtain graphs for different spatial resolutions (see [persistent homology](https://en.wikipedia.org/wiki/Persistent_homology)), yielding the following gif:
+for different such thresholds:
+![hr graph2](https://github.com/izzortsi/hr-graphs-ph/blob/master/src/outputs/HR_sfdp0.03.png)
+and
+![hr graph3](https://github.com/izzortsi/hr-graphs-ph/blob/master/src/outputs/HR_sfdp0.05.png)
+and
+![hr graph4](https://github.com/izzortsi/hr-graphs-ph/blob/master/src/outputs/HR_sfdp0.09.png)
+
+finally, by varying this threshold we obtain a sequence of graphs for different spatial resolutions (see [persistent homology](https://en.wikipedia.org/wiki/Persistent_homology)), yielding the following animation:
 
 ![hr ph gif](https://github.com/izzorts/hr-graphs-ph/blob/master/outputs/output.gif)
 
